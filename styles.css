@@ -62,7 +62,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* ---------- Hero ---------- */
 
 .hero {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 0;
   overflow: hidden;
   padding: 56px 24px 64px;
   text-align: center;
@@ -196,6 +198,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* ---------- Sections ---------- */
 
+/* Every section needs to sit above (and visually occlude) the sticky hero
+   once it scrolls up to overlap it - position:relative gives each one its
+   own stacking context above the hero's z-index:0, and an explicit opaque
+   background stops the hero showing through any padding/gaps. */
+.section, .section-alt, .site-footer {
+  position: relative;
+  z-index: 1;
+}
+.section, .site-footer { background: var(--cream); }
+
 .section {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -203,6 +215,47 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .section-alt { background: var(--cream-panel); max-width: none; }
 .section-alt > * { max-width: var(--content-width); margin-left: auto; margin-right: auto; }
+
+/* ---------- Parallax section backgrounds ---------- */
+/* Applied to About/Visit/Contact. A section marked .parallax-host goes
+   full-bleed (overriding .section's own max-width, since the drifting
+   background needs to extend beyond the text column) with its real content
+   re-constrained via the child selector below. The actual drift is handled
+   by a small scroll listener in script.js, which nudges .parallax-bg's
+   transform - kept in JS rather than pure-CSS perspective/translateZ
+   scroll-hijacking, since that technique requires turning the whole page
+   into a custom scroll container, which risks breaking native mobile
+   momentum scrolling and anchor-jump behaviour for very little gain here. */
+.parallax-host {
+  position: relative;
+  overflow: hidden;
+  max-width: none;
+}
+.parallax-host > *:not(.parallax-bg) {
+  max-width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.parallax-bg {
+  position: absolute;
+  inset: -20% -10%;
+  background-repeat: no-repeat;
+  background-size: 520px auto;
+  opacity: 0.09;
+  pointer-events: none;
+  will-change: transform;
+}
+.parallax-bg-1 { background-image: url('images/splash-navy-bl.png'); background-position: 6% 25%; }
+.parallax-bg-2 { background-image: url('images/splash-rust-tr.png'); background-position: 94% 20%; }
+.parallax-bg-3 { background-image: url('images/splash-navy-tl.png'); background-position: 90% 75%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-bg { transform: none !important; }
+}
+@media (max-width: 640px) {
+  .parallax-bg { background-size: 320px auto; opacity: 0.08; }
+}
 
 .section h2 {
   font-size: clamp(1.6rem, 4vw, 2.1rem);
@@ -299,5 +352,4 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 640px) {
   .visit-grid { grid-template-columns: 1fr; gap: 24px; }
   .gallery-preview { gap: 10px; }
-  .splash { width: 220px; height: 220px; }
 }
