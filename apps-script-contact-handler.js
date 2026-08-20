@@ -19,6 +19,18 @@
 
 const CONTACT_EMAIL = 'williams.gail.m@gmail.com';
 
+// Apps Script sends a GET request whenever the deployment URL is visited
+// directly in a browser (including the Apps Script editor's own "Test web
+// app" button) - without this, that GET has nowhere to go and throws
+// "Script function not found: doGet". This just confirms the endpoint is
+// alive; it isn't part of the real form-submission flow (that's doPost,
+// below).
+function doGet(e) {
+  return ContentService.createTextOutput(
+    'This endpoint accepts POST requests from the exhibition contact form only.'
+  );
+}
+
 function doPost(e) {
   try {
     const params = e.parameter;
