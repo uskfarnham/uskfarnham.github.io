@@ -13,6 +13,13 @@
   --rust-soft:    #b4632f;
   --ink:          #4a4a4a;
 
+  /* Tonal variants - blends of the above, not new hues, used to
+     differentiate sections while staying visibly the same palette. */
+  --tint-rust:    #f0ddc8;   /* cream warmed with a little rust - About */
+  --tint-navy:    #eceef3;   /* white cooled with a little navy - Visit */
+  --text-on-navy:      #f3ead9;            /* cream, for headings on navy sections */
+  --text-on-navy-soft:  rgba(243, 234, 217, 0.8); /* body text on navy sections */
+
   /* Type */
   --font-display: 'Zilla Slab', Georgia, serif;
   --font-script:  'Caveat', cursive;
@@ -130,13 +137,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .divider span { flex: 1; height: 1px; background: var(--navy); opacity: 0.5; }
 .divider i { font-style: normal; font-size: 0.7rem; }
 .divider-small { max-width: 220px; margin: 18px auto; }
-
-.gallery-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 8px 0 28px;
-}
+.divider-on-navy span { background: var(--text-on-navy); opacity: 0.4; }
+.divider-on-navy { color: var(--text-on-navy); }
 
 .artwork-frame {
   margin: 0;
@@ -216,6 +218,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .section-alt { background: var(--cream-panel); max-width: none; }
 .section-alt > * { max-width: var(--content-width); margin-left: auto; margin-right: auto; }
 
+/* Tonal modifiers - layered on top of .section/.section-alt to vary the
+   background while staying inside the existing navy/rust/cream palette
+   (see the tint tokens in :root). Applied per-section in index.html. */
+.tint-rust { background: var(--tint-rust); }
+.tint-navy { background: var(--tint-navy); }
+
 /* ---------- Parallax section backgrounds ---------- */
 /* Applied to About/Visit/Contact. A section marked .parallax-host goes
    full-bleed (overriding .section's own max-width, since the drifting
@@ -249,6 +257,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .parallax-bg-1 { background-image: url('images/splash-navy-bl.png'); background-position: 6% 25%; }
 .parallax-bg-2 { background-image: url('images/splash-rust-tr.png'); background-position: 94% 20%; }
 .parallax-bg-3 { background-image: url('images/splash-navy-tl.png'); background-position: 90% 75%; }
+.parallax-bg-4 { background-image: url('images/splash-rust-tr.png'); background-position: 85% 30%; opacity: 0.18; }
 
 @media (prefers-reduced-motion: reduce) {
   .parallax-bg { transform: none !important; }
@@ -287,7 +296,26 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .text-link:hover { opacity: 0.75; }
 
-/* ---------- Contact form ---------- */
+/* ---------- Gallery section ---------- */
+/* Deliberately the strongest tonal contrast on the page - a dark "gallery
+   wall" band right after the hero, distinct from every other section, with
+   the two sketches shown larger as the visual centrepiece. Text colours
+   need explicit overrides here since the global h1-h3/body rules assume a
+   light background. */
+
+.gallery-section { background: var(--navy); }
+.gallery-section h2 { color: var(--text-on-navy); }
+.gallery-section .section-intro { color: var(--text-on-navy-soft); max-width: 620px; margin: 0 auto 32px; text-align: center; }
+
+.gallery-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .gallery-preview { grid-template-columns: 1fr; gap: 16px; }
+}
 
 .contact-form { max-width: 520px; margin-top: 24px; }
 
@@ -340,16 +368,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* ---------- Footer ---------- */
 
 .site-footer {
+  background: var(--navy);
   text-align: center;
   padding: 28px 24px 40px;
-  color: var(--navy);
+  color: var(--text-on-navy-soft);
   font-size: 0.85rem;
-  opacity: 0.8;
 }
 
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
   .visit-grid { grid-template-columns: 1fr; gap: 24px; }
-  .gallery-preview { gap: 10px; }
 }
