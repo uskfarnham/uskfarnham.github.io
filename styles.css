@@ -1,0 +1,288 @@
+/* ==========================================================================
+   Farnham Urban Sketchers & Friends — Exhibition site
+   Design tokens lifted directly from the exhibition poster, per brief.
+   ========================================================================== */
+
+:root {
+  /* Colour */
+  --cream:        #f3ead9;
+  --cream-panel:  #ffffff;
+  --navy:         #1b2a45;
+  --navy-soft:    #24406b;
+  --rust:         #a8562e;
+  --rust-soft:    #b4632f;
+  --ink:          #4a4a4a;
+
+  /* Type */
+  --font-display: 'Zilla Slab', Georgia, serif;
+  --font-script:  'Caveat', cursive;
+  --font-body:    'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Layout */
+  --content-width: 900px;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3 { font-family: var(--font-display); color: var(--navy); margin: 0; }
+
+a { color: var(--rust); }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--navy);
+  color: white;
+  padding: 10px 16px;
+  z-index: 100;
+}
+.skip-link:focus { left: 10px; top: 10px; }
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 56px 24px 64px;
+  text-align: center;
+}
+
+.splash {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.splash-navy { background: radial-gradient(circle at 35% 35%, var(--navy-soft) 0%, var(--navy) 55%, transparent 72%); }
+.splash-rust { background: radial-gradient(circle at 65% 35%, var(--rust-soft) 0%, var(--rust) 55%, transparent 72%); }
+.splash-tl { top: -160px; left: -160px; }
+.splash-tr { top: -160px; right: -160px; }
+.splash-bl { bottom: -180px; left: -180px; width: 280px; height: 280px; }
+
+.hero-content { position: relative; z-index: 1; max-width: var(--content-width); margin: 0 auto; }
+
+.hero-title {
+  font-weight: 700;
+  font-size: clamp(2.8rem, 9vw, 5.5rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin: 4px 0 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 340px;
+  margin: 24px auto;
+  color: var(--navy);
+}
+.divider span { flex: 1; height: 1px; background: var(--navy); opacity: 0.5; }
+.divider i { font-style: normal; font-size: 0.7rem; }
+.divider-small { max-width: 220px; margin: 18px auto; }
+
+.gallery-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 8px 0 28px;
+}
+
+.artwork-frame {
+  margin: 0;
+  background: var(--cream-panel);
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(27, 42, 69, 0.12);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.artwork-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--navy-soft);
+  opacity: 0.55;
+  padding: 16px;
+  text-align: center;
+}
+.artwork-placeholder span { font-size: 0.8rem; font-family: var(--font-body); }
+
+/* When real images are added: replace the placeholder <figure> contents in
+   index.html with <img class="artwork-image" src="..." alt="..."> — this
+   rule is ready and waiting for that swap, no other CSS change needed. */
+.artwork-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.exhibition-line {
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  color: var(--navy);
+  margin: 8px 0;
+}
+
+.dates {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: 0.08em;
+  color: var(--rust);
+  margin: 0;
+}
+
+.address {
+  font-size: 1rem;
+  color: var(--navy);
+  margin: 6px 0 0;
+}
+
+.visit-line {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: var(--navy);
+}
+.visit-line strong { color: var(--rust); letter-spacing: 0.03em; }
+
+/* ---------- Sections ---------- */
+
+.section {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+.section-alt { background: var(--cream-panel); max-width: none; }
+.section-alt > * { max-width: var(--content-width); margin-left: auto; margin-right: auto; }
+
+.section h2 {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  margin-bottom: 20px;
+}
+
+.section p { max-width: 680px; }
+.section-alt p { max-width: 680px; }
+
+.empty-note {
+  font-style: italic;
+  color: var(--ink);
+  opacity: 0.75;
+}
+
+.visit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.visit-grid h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.visit-grid p { margin: 0 0 12px; }
+
+.text-link {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rust);
+}
+.text-link:hover { opacity: 0.75; }
+
+/* ---------- Contact form ---------- */
+
+.contact-form { max-width: 520px; margin-top: 24px; }
+
+.form-row { margin-bottom: 18px; }
+.form-row label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.form-row input,
+.form-row textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #cfc4ac;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: var(--cream);
+  resize: vertical;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.submit-btn {
+  background: var(--rust);
+  color: white;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.submit-btn:hover { background: var(--navy); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+#form-status { margin-top: 12px; font-weight: 600; min-height: 1.2em; }
+#form-status.success { color: #2a7a3d; }
+#form-status.error { color: #a8562e; }
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  text-align: center;
+  padding: 28px 24px 40px;
+  color: var(--navy);
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .visit-grid { grid-template-columns: 1fr; gap: 24px; }
+  .gallery-preview { gap: 10px; }
+  .splash { width: 220px; height: 220px; }
+}
