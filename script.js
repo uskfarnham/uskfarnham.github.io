@@ -14,7 +14,7 @@
 // FORM_ENDPOINT below before this will actually send anything.
 // ---------------------------------------------------------------------------
 
-const FORM_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzGRO792eo61mWtVpo-DvU6bbE7RrTHnthPYYZDjG7cgbhNjGO-eOStyoLix7y2GHEPsw/exec';
 
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('contact-form');
