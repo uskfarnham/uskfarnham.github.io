@@ -70,18 +70,33 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .splash {
   position: absolute;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  filter: blur(2px);
-  opacity: 0.85;
+  background-repeat: no-repeat;
+  background-size: contain;
   pointer-events: none;
 }
-.splash-navy { background: radial-gradient(circle at 35% 35%, var(--navy-soft) 0%, var(--navy) 55%, transparent 72%); }
-.splash-rust { background: radial-gradient(circle at 65% 35%, var(--rust-soft) 0%, var(--rust) 55%, transparent 72%); }
-.splash-tl { top: -160px; left: -160px; }
-.splash-tr { top: -160px; right: -160px; }
-.splash-bl { bottom: -180px; left: -180px; width: 280px; height: 280px; }
+.splash-tl {
+  top: 0; left: 0;
+  width: 145px; height: 290px;
+  background-image: url('images/splash-navy-tl.png');
+  background-position: top left;
+}
+.splash-tr {
+  top: 0; right: 0;
+  width: 125px; height: 290px;
+  background-image: url('images/splash-rust-tr.png');
+  background-position: top right;
+}
+.splash-bl {
+  bottom: 0; left: 0;
+  width: 240px; height: 330px;
+  background-image: url('images/splash-navy-bl.png');
+  background-position: bottom left;
+}
+
+@media (max-width: 640px) {
+  .splash-tl, .splash-tr { width: 90px; height: 180px; }
+  .splash-bl { width: 150px; height: 210px; }
+}
 
 .hero-content { position: relative; z-index: 1; max-width: var(--content-width); margin: 0 auto; }
 

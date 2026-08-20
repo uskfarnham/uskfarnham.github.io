@@ -1,54 +1,79 @@
-// ---------------------------------------------------------------------------
-// Contact form submission.
-//
-// Submits via a hidden <iframe> target rather than fetch(): a plain HTML
-// form-to-anywhere submission is not subject to CORS the way a script-
-// initiated fetch() is, so this avoids needing any CORS configuration on
-// the Apps Script side (which doPost doesn't support cleanly anyway).
-// The trade-off: we can't read the response body, so success/failure is
-// shown optimistically once the iframe finishes loading. Good enough for a
-// simple contact form.
-//
-// REQUIRED SETUP: paste the URL of your deployed Apps Script "contact form
-// handler" web app (see apps-script-contact-handler.js in this folder) into
-// FORM_ENDPOINT below before this will actually send anything.
-// ---------------------------------------------------------------------------
+/**
+ * USK Farnham Exhibition — Contact Form Handler
+ * -----------------------------------------------------------------------
+ * SETUP (one-time):
+ * 1. Go to script.google.com → New Project.
+ * 2. Delete the default empty Code.gs content and paste this whole file in.
+ * 3. Update CONTACT_EMAIL below if needed (currently your testing address).
+ * 4. Deploy → New deployment → type "Web app".
+ *      - Execute as: Me
+ *      - Who has access: Anyone
+ * 5. Copy the resulting /exec URL and paste it into FORM_ENDPOINT in the
+ *    site's script.js.
+ *
+ * This is a genuinely separate, standalone Apps Script project — deliberately
+ * not part of the exhibition-management app. It has no data-sheet access, no
+ * admin auth, nothing beyond "receive a form POST, email it, done."
+ * -----------------------------------------------------------------------
+ */
 
-const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzGRO792eo61mWtVpo-DvU6bbE7RrTHnthPYYZDjG7cgbhNjGO-eOStyoLix7y2GHEPsw/exec';
+const CONTACT_EMAIL = 'williams.gail.m@gmail.com';
 
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('contact-form');
-  const iframe = document.getElementById('hidden-form-target');
-  const statusEl = document.getElementById('form-status');
-  const submitBtn = form.querySelector('.submit-btn');
+// Apps Script sends a GET request whenever the deployment URL is visited
+// directly in a browser (including the Apps Script editor's own "Test web
+// app" button) - without this, that GET has nowhere to go and throws
+// "Script function not found: doGet". This just confirms the endpoint is
+// alive; it isn't part of the real form-submission flow (that's doPost,
+// below).
+function doGet(e) {
+  return ContentService.createTextOutput(
+    'This endpoint accepts POST requests from the exhibition contact form only.'
+  );
+}
 
-  let awaitingResponse = false;
+function doPost(e) {
+  try {
+    const params = e.parameter;
 
-  form.addEventListener('submit', function (e) {
-    if (FORM_ENDPOINT.indexOf('PASTE_YOUR') === 0) {
-      e.preventDefault();
-      statusEl.textContent = 'Contact form is not connected yet — see script.js.';
-      statusEl.className = 'error';
-      return;
+    // Honeypot check: a real visitor never fills this in (it's hidden via
+    // CSS). Any non-empty value here means a bot filled every visible field
+    // it could find. Silently accept-and-discard rather than erroring, so
+    // the bot gets no signal that it was caught.
+    if (params.website && params.website.toString().trim() !== '') {
+      return _respond({ ok: true });
     }
 
-    // Point the form at the Apps Script endpoint and the hidden iframe,
-    // then let the browser submit it natively (no preventDefault here).
-    form.action = FORM_ENDPOINT;
-    form.target = 'hidden-form-target';
+    const name = (params.name || '').toString().trim();
+    const email = (params.email || '').toString().trim();
+    const message = (params.message || '').toString().trim();
 
-    awaitingResponse = true;
-    submitBtn.disabled = true;
-    statusEl.textContent = 'Sending…';
-    statusEl.className = '';
-  });
+    if (!name || !email || !message) {
+      return _respond({ ok: false, error: 'Missing required field.' });
+    }
 
-  iframe.addEventListener('load', function () {
-    if (!awaitingResponse) return; // ignore the iframe's initial blank load
-    awaitingResponse = false;
-    submitBtn.disabled = false;
-    statusEl.textContent = "Thanks — your message has been sent. We'll get back to you soon.";
-    statusEl.className = 'success';
-    form.reset();
-  });
-});
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      return _respond({ ok: false, error: 'Invalid email address.' });
+    }
+
+    MailApp.sendEmail({
+      to: CONTACT_EMAIL,
+      replyTo: email,
+      subject: 'Exhibition website enquiry from ' + name,
+      body: 'From: ' + name + ' <' + email + '>\n\n' + message
+    });
+
+    return _respond({ ok: true });
+
+  } catch (err) {
+    return _respond({ ok: false, error: err.toString() });
+  }
+}
+
+// The response body is never actually read by the site (see script.js's
+// hidden-iframe explanation), but returning something sensible keeps this
+// testable directly and future-proofs against a fetch()-based approach later.
+function _respond(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
