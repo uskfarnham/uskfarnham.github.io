@@ -94,3 +94,64 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', onScrollOrResize);
   updateLayers();
 })();
+
+// ---------------------------------------------------------------------------
+// Artist directory cards, pulled from the Exhibition Portal. Loaded via
+// JSONP (a <script> tag, not fetch()) since the Apps Script endpoint sends
+// no CORS headers — same constraint the contact form works around with a
+// hidden iframe, just the GET-side equivalent.
+//
+// REQUIRED SETUP: this should match the portal's deployed /exec URL — reuse
+// the same one already embedded in the ArtistInfoPage links.
+// ---------------------------------------------------------------------------
+
+const PORTAL_URL = 'https://script.google.com/macros/s/AKfycbyztaNJ308WkL6jSx8-slbSje2i9Imb61RdU5rvfSVbrYobyAFL-f1xdfwP4n0OCshH4Q/exec';
+
+(function () {
+  const container = document.getElementById('artist-cards');
+  const emptyNote = document.getElementById('artists-empty-note');
+  if (!container) return;
+
+  const callbackName = 'usk_artistlist_cb_' + Date.now();
+
+  window[callbackName] = function (artists) {
+    delete window[callbackName];
+    script.remove();
+
+    if (!artists || artists.length === 0) return; // leave the "check back nearer" note as-is
+
+    emptyNote.style.display = 'none';
+    container.innerHTML = artists.map(renderArtistCard).join('');
+  };
+
+  function renderArtistCard(artist) {
+    const href = PORTAL_URL + '?view=artistinfo&id=' + encodeURIComponent(artist.id);
+    const img = artist.imageUrl
+      ? `<img class="artist-card-photo" src="${sizedPortalImage(artist.imageUrl, 240)}" alt="" loading="lazy">`
+      : `<div class="artist-card-photo artist-card-photo-placeholder" aria-hidden="true"></div>`;
+
+    return `<a class="artist-card" href="${href}" target="_blank" rel="noopener">
+      ${img}
+      <span class="artist-card-name">${escapeHtml(artist.displayName)}</span>
+    </a>`;
+  }
+
+  // Portal images are served via the lh3 proxy (see _driveUrlToProxyUrl in
+  // ArtistInfo.js) which accepts an =sNNN size suffix - request a small
+  // thumbnail rather than the full-size image for the card grid.
+  function sizedPortalImage(url, size) {
+    if (!url || url.indexOf('lh3.googleusercontent.com') === -1) return url;
+    return url.replace(/=s\d+$/, '') + '=s' + size;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  const script = document.createElement('script');
+  script.src = PORTAL_URL + '?view=artistlist&callback=' + callbackName;
+  script.onerror = function () { /* fail quietly - empty note stays visible */ };
+  document.body.appendChild(script);
+})();
