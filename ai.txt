@@ -1,0 +1,19 @@
+# ai.txt - AI Training Permissions for uskfarnham.github.io: Farnham Urban Sketchers & Friends — Exhibition, 7–8 November 2026
+# Default stance is explicit opt-out for machine learning training.
+
+System: *
+Disallow: ai_training:images
+Disallow: ai_training:text
+
+# Explicit media file blocks
+File-Extension: jpg, jpeg, png, webp, gif
+Allow: false
+Purpose: ai_training, fine_tuning, synthetic_data
+
+File-Extension: html, txt, md
+Allow: false
+Purpose: ai_training, summarization
+
+# Attribution & Contact info for commercial licensing inquiries
+Contact: https://uskfarnham.github.io/#contact (contact form; messages are passed on to the individual participating artists)
+Declaration: All rights reserved by the individual participating artists.

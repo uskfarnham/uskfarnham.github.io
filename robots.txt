@@ -1,0 +1,60 @@
+# ==========================================
+# ALLOW MANDATORY SEARCH ENGINES & INDEXING
+# ==========================================
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Allow AI citation/search engines to link to our exhibition
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# ==========================================
+# BLOCK ALL LLM / DATA-MINING TRAINING BOTS
+# ==========================================
+
+# OpenAI (ChatGPT Training)
+User-agent: GPTBot
+Disallow: /
+
+# Google AI (Gemini Training)
+User-agent: Google-Extended
+Disallow: /
+
+# Anthropic (Claude Training)
+User-agent: ClaudeBot
+Disallow: /
+
+# Meta AI
+User-agent: meta-externalagent
+User-agent: meta-externalfetcher
+Disallow: /
+
+# Apple AI 
+User-agent: Applebot-Extended
+Disallow: /
+
+# ByteDance / TikTok AI
+User-agent: Bytespider
+Disallow: /
+
+# Common Crawl (Massive open-source data training dump)
+User-agent: CCBot
+Disallow: /
+
+# Generic Bulk Scrapers & Aggressive Harvesters
+User-agent: Amazonbot
+User-agent: Claude-User
+User-agent: ChatGPT-User
+User-agent: Perplexity-User
+User-agent: Diffbot
+User-agent: OmilexBot
+Disallow: /

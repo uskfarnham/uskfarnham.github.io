@@ -3,63 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Farnham Urban Sketchers &amp; Friends — Exhibition, 6–8 November 2026</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="A public exhibition by Farnham Urban Sketchers &amp; Friends at Brightwells Creative Space, Old Market Place, Farnham. 6–8 November 2026.">
+<meta name="color-scheme" content="only light">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;700&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Farnham Urban Sketchers &amp; Friends — Exhibition, 7–8 November 2026</title>
+<meta name="description" content="A public exhibition by Farnham Urban Sketchers &amp; Friends at Brightwells Creative Space, Old Market Place, Farnham. 7–8 November 2026, with a private view on 6 November.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
+<link rel="preload" href="fonts/Fornami-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HERO (mirrors the poster layout) ============ -->
 <header class="hero">
-  <div class="splash splash-navy splash-tl" aria-hidden="true"></div>
-  <div class="splash splash-rust splash-tr" aria-hidden="true"></div>
-  <div class="splash splash-navy splash-bl" aria-hidden="true"></div>
-
   <div class="hero-content">
-    <h1 class="hero-title">Farnham</h1>
-    <p class="hero-subtitle">Urban Sketchers &amp; Friends</p>
 
-    <div class="divider" role="presentation"><span></span><i>&#9670;</i><span></span></div>
+    <p class="hero-when">
+      Exhibition at Brightwells Creative Space<br>
+      7th – 8th November, 10am – 4pm
+    </p>
 
-    <p class="exhibition-line">Exhibition at Brightwells Creative Space</p>
+    <div class="hero-main">
+      <!-- Private view badge. DOM order: first, so on mobile it sits above the title. -->
+      <div class="private-view">
+        <strong>Private view:</strong>
+        <span>6<sup>th</sup> November</span>
+        <span>6pm – 7.30pm</span>
+      </div>
 
-    <div class="divider divider-small" role="presentation"><span></span><i>&#9670;</i><span></span></div>
+      <h1 class="hero-title">
+        <!-- Set in the Fornami font (fonts/Fornami-Regular.woff2). The font maps '&' to the
+             hand-drawn ampersand and bounces the letters via contextual alternates. -->
+        <span class="line l1">Farnham</span>
+        <span class="line l2"><span class="w">Urban</span> <span class="w">Sketchers</span></span>
+        <span class="line l3">&amp; Friends</span>
+      </h1>
+    </div>
 
-    <p class="dates">6 – 8 November 2026</p>
-    <p class="address">Old Market Place, Farnham GU9 7SF</p>
+  </div>
 
-    <div class="divider divider-small" role="presentation"><span></span><i>&#9670;</i><span></span></div>
-
-    <p class="visit-line"><strong>6 November:</strong> Private viewing 6:00 – 7:30pm</p>
-    <p class="visit-line"><strong>7 – 8 November:</strong> 10:00am – 4:00pm</p>
+  <!-- Full-bleed artwork; address sits over its white corner, as on the poster -->
+  <div class="hero-art">
+    <img src="images/hero-art-1274.webp"
+         srcset="images/hero-art-1274.webp 1274w, images/hero-art-2548.webp 2548w"
+         sizes="100vw" width="2548" height="1420"
+         alt="Pen and watercolour sketches of Farnham parish church and a timber-framed street">
+    <div class="hero-where">
+      <p class="hero-address">Old Market Place,<br>Farnham, GU9 7SF</p>
+      <p class="hero-handle">@uskfarnham</p>
+    </div>
   </div>
 </header>
 
 <main id="main-content">
-
-  <!-- ============ GALLERY ============ -->
-  <section class="section section-alt gallery-section parallax-host" id="gallery">
-    <div class="parallax-bg parallax-bg-4" aria-hidden="true"></div>
-    <h2>A glimpse of the work</h2>
-    <div class="divider divider-small divider-on-navy" role="presentation"><span></span><i>&#9670;</i><span></span></div>
-    <p class="section-intro">A first look at the sketches on show — more to follow as artists submit their pieces.</p>
-    <div class="gallery-preview">
-      <figure class="artwork-frame">
-        <img class="artwork-image" src="images/farnham_1.png" alt="Watercolour sketch of a Farnham street">
-      </figure>
-      <figure class="artwork-frame">
-        <img class="artwork-image" src="images/farnham_2.png" alt="Watercolour sketch of a Farnham church">
-      </figure>
-    </div>
-  </section>
 
   <!-- ============ ABOUT ============ -->
   <section class="section section-alt tint-rust parallax-host" id="about">
@@ -148,7 +149,11 @@
 </main>
 
 <footer class="site-footer">
-  <p>Farnham Urban Sketchers &amp; Friends &nbsp;·&nbsp; 6–8 November 2026 &nbsp;·&nbsp; Brightwells Creative Space</p>
+  <p>Farnham Urban Sketchers &amp; Friends &nbsp;·&nbsp; 7–8 November 2026 &nbsp;·&nbsp; Brightwells Creative Space</p>
+  <p><strong>&copy; 2026 Farnham Urban Sketchers &amp; Friends.</strong> All artwork, images, and text on this website 
+    are the intellectual property of their respective creators. All rights reserved by the individual artists. The 
+    unauthorized use of any content on this site for the purpose of training generative artificial intelligence (AI) models, 
+    machine learning, or automated data mining is strictly prohibited.</p>
 </footer>
 
 <script src="script.js"></script>

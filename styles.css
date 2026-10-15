@@ -3,30 +3,41 @@
    Design tokens lifted directly from the exhibition poster, per brief.
    ========================================================================== */
 
+/* Title font: hand-drawn by the exhibition organiser (Calligraphr). The '&' character
+   is mapped to the hand-drawn ampersand inside the font file itself. */
+@font-face {
+  font-family: 'Fornami';
+  src: url('fonts/Fornami-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* Colour */
-  --cream:        #f3ead9;
+  color-scheme: only light;   /* stop browsers force-darkening the white design */
+    /* Colour — from the redesigned poster.
+     Names kept from the old palette; --rust is now the private-view pink. */
+  --cream:        #ffffff;   /* page background (poster is white) */
   --cream-panel:  #ffffff;
-  --navy:         #1b2a45;
-  --navy-soft:    #24406b;
-  --rust:         #a8562e;
-  --rust-soft:    #b4632f;
-  --ink:          #4a4a4a;
+  --navy:         #22265b;   /* poster Helvetica text */
+  --navy-soft:    #283892;   /* poster title blue */
+  --rust:         #e05f76;   /* private-view pink: badge/accents only, not small text */
+  --rust-soft:    #e05f76;
+  --ink:          #22265b;
 
-  /* Tonal variants - blends of the above, not new hues, used to
-     differentiate sections while staying visibly the same palette. */
-  --tint-rust:    #f0ddc8;   /* cream warmed with a little rust - About */
-  --tint-navy:    #eceef3;   /* white cooled with a little navy - Visit */
-  --text-on-navy:      #f3ead9;            /* cream, for headings on navy sections */
-  --text-on-navy-soft:  rgba(243, 234, 217, 0.8); /* body text on navy sections */
+  --tint-rust:    #fceef1;   /* very pale pink - About */
+  --tint-navy:    #eef0f8;   /* very pale navy - Visit */
+  --text-on-navy:      #ffffff;
+  --text-on-navy-soft: rgba(255, 255, 255, 0.85);
 
-  /* Type */
-  --font-display: 'Zilla Slab', Georgia, serif;
-  --font-script:  'Caveat', cursive;
-  --font-body:    'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Type — Helvetica throughout; Caveat only for the title placeholder */
+  --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-script:  'Fornami', 'Caveat', cursive;
+  --font-body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Layout */
-  --content-width: 900px;
+  --content-width: 1000px;   /* hero and every section share this column, so left edges line up */
+  --gutter: 24px;
   --radius: 8px;
 }
 
@@ -47,9 +58,10 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3 { font-family: var(--font-display); color: var(--navy); margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; color: var(--navy); margin: 0; }
 
-a { color: var(--rust); }
+a { color: var(--navy-soft); }
+
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 3px solid var(--rust);
   outline-offset: 2px;
@@ -68,135 +80,100 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* ---------- Hero ---------- */
 
+/* ---------- Hero (mirrors the poster) ---------- */
+
 .hero {
-  position: sticky;
-  top: 0;
-  z-index: 0;
+  position: relative;
   overflow: hidden;
-  padding: 56px 24px 64px;
+  padding: 40px var(--gutter) 0;
+  background: var(--cream);
+}
+
+.hero-content { max-width: var(--content-width); margin: 0 auto; }
+
+.hero-when {
   text-align: center;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 3.2vw, 2rem);
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--navy);
+  margin: 0 0 24px;
 }
 
-.splash {
-  position: absolute;
-  background-repeat: no-repeat;
-  background-size: contain;
-  pointer-events: none;
-}
-.splash-tl {
-  top: 0; left: 0;
-  width: 300px; height: 250px;
-  background-image: url('images/splash-navy-tl.png');
-  background-position: top left;
-}
-.splash-tr {
-  top: 0; right: 0;
-  width: 350px; height: 625px;
-  background-image: url('images/splash-rust-tr.png');
-  background-position: top right;
-}
-.splash-bl {
-  bottom: 0; left: 0;
-  width: 400px; height: 680px;
-  background-image: url('images/splash-navy-bl.png');
-  background-position: bottom left;
-}
-
-@media (max-width: 640px) {
-  .splash-tl, .splash-tr { width: 90px; height: 180px; }
-  .splash-bl { width: 150px; height: 210px; }
-}
-
-.hero-content { position: relative; z-index: 1; max-width: var(--content-width); margin: 0 auto; }
+.hero-main { --title-fs: clamp(4rem, 17vw, 8.5rem); position: relative; }
 
 .hero-title {
-  font-weight: 700;
-  font-size: clamp(2.8rem, 9vw, 5.5rem);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.hero-subtitle {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.1rem, 3vw, 1.8rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--navy);
-  margin: 4px 0 0;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  max-width: 340px;
-  margin: 24px auto;
-  color: var(--navy);
-}
-.divider span { flex: 1; height: 1px; background: var(--navy); opacity: 0.5; }
-.divider i { font-style: normal; font-size: 0.7rem; }
-.divider-small { max-width: 220px; margin: 18px auto; }
-.divider-on-navy span { background: var(--text-on-navy); opacity: 0.4; }
-.divider-on-navy { color: var(--text-on-navy); }
-
-.artwork-frame {
   margin: 0;
-  background: var(--cream-panel);
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(27, 42, 69, 0.12);
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
+  font-family: var(--font-script);
+  font-weight: 400;                 /* Fornami has one weight; stops browsers faking bold */
+  font-synthesis: none;
+  font-size: var(--title-fs);
+  line-height: 1.05;
+  color: var(--navy-soft);
+  -webkit-text-stroke: 0.025em currentColor;   /* thickens strokes towards the poster's marker weight */
 }
+.hero-title .line { display: block; }
+/* Phones/small tablets: four stacked lines, staggered as on the poster */
+.hero-title .w { display: block; }
+.hero-title .l2 .w:first-child { padding-left: 17%; }
+.hero-title .l2 .w:last-child  { padding-left: 6%; }
+.hero-title .l3 { padding-left: 22%; }
 
-.artwork-placeholder {
-  height: 100%;
+/* For the real artwork: */
+.hero-title img { display: block; width: 100%; height: auto; }
+
+.private-view {
+  --pv: max(150px, calc(var(--title-fs) * 1.6));   /* badge diameter tracks the title size */
+  position: absolute;
+  top: calc(var(--title-fs) * 0.1);
+  left: calc(var(--title-fs) * 2.95);             /* just right of the end of 'Farnham' / 'Urban' */
+  width: var(--pv);
+  height: var(--pv);
+  border-radius: 50%;
+  background: var(--rust);
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  color: var(--navy-soft);
-  opacity: 0.55;
-  padding: 16px;
   text-align: center;
-}
-.artwork-placeholder span { font-size: 0.8rem; font-family: var(--font-body); }
-
-/* When real images are added: replace the placeholder <figure> contents in
-   index.html with <img class="artwork-image" src="..." alt="..."> — this
-   rule is ready and waiting for that swap, no other CSS change needed. */
-.artwork-image { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.exhibition-line {
-  font-family: var(--font-script);
+  white-space: nowrap;
   font-weight: 700;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-size: calc(var(--pv) * 0.1);
+  line-height: 1.5;
+}
+.private-view strong { margin-bottom: 0.4em; }
+
+/* Wider screens: 'Urban Sketchers' shares a line (saves a line of height) and the
+   badge moves to the right-hand edge of the column, level with 'Farnham'. */
+@media (min-width: 760px) {
+  .hero-main { --title-fs: min(8.5rem, 13vw); }
+  .hero-title .l2 { white-space: nowrap; padding-left: 2%; }
+  .hero-title .w { display: inline; }
+  .hero-title .l2 .w:first-child,
+  .hero-title .l2 .w:last-child { padding-left: 0; }
+  .hero-title .l3 { padding-left: 14%; }
+  .private-view {
+    --pv: max(150px, calc(var(--title-fs) * 1.55));
+    left: auto;
+    right: 0;
+    top: calc(var(--title-fs) * 0.05);
+  }
+}
+
+
+.hero-address,
+.hero-handle {
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3.2vw, 2rem);
+  line-height: 1.3;
   color: var(--navy);
-  margin: 8px 0;
-}
-
-.dates {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  letter-spacing: 0.08em;
-  color: var(--rust);
   margin: 0;
 }
+.hero-address { margin-top: 40px; }
+.hero-handle  { margin-top: 12px; }
 
-.address {
-  font-size: 1rem;
-  color: var(--navy);
-  margin: 6px 0 0;
-}
-
-.visit-line {
-  margin: 4px 0;
-  font-size: 0.95rem;
-  color: var(--navy);
-}
-.visit-line strong { color: var(--rust); letter-spacing: 0.03em; }
 
 /* ---------- Sections ---------- */
 
@@ -211,12 +188,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .section, .site-footer { background: var(--cream); }
 
 .section {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 56px 24px;
+  /* Content column: --content-width wide, centred on wide screens, with a minimum gutter.
+     Everything inside starts at the same left edge as the hero title. */
+  padding: 56px max(var(--gutter), calc((100% - var(--content-width)) / 2));
 }
-.section-alt { background: var(--cream-panel); max-width: none; }
-.section-alt > * { max-width: var(--content-width); margin-left: auto; margin-right: auto; }
+.section-alt { background: var(--cream-panel); }
 
 /* Tonal modifiers - layered on top of .section/.section-alt to vary the
    background while staying inside the existing navy/rust/cream palette
@@ -237,12 +213,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .parallax-host {
   position: relative;
   overflow: hidden;
-  max-width: none;
-}
-.parallax-host > *:not(.parallax-bg) {
-  max-width: var(--content-width);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .parallax-bg {
@@ -268,11 +238,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .section h2 {
   font-size: clamp(1.6rem, 4vw, 2.1rem);
+  line-height: 1.2;
   margin-bottom: 20px;
+  text-align: left;
 }
+.section h3 { font-size: 1.1rem; line-height: 1.3; margin-bottom: 8px; }
 
-.section p { max-width: 680px; }
-.section-alt p { max-width: 680px; }
+.section p { max-width: 68ch; }
 
 .empty-note {
   font-style: italic;
@@ -285,7 +257,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   grid-template-columns: 1fr 1fr;
   gap: 32px;
 }
-.visit-grid h3 { font-size: 1.1rem; margin-bottom: 8px; }
 .visit-grid p { margin: 0 0 12px; }
 
 .text-link {
@@ -295,27 +266,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   border-bottom: 1px solid var(--rust);
 }
 .text-link:hover { opacity: 0.75; }
-
-/* ---------- Gallery section ---------- */
-/* Deliberately the strongest tonal contrast on the page - a dark "gallery
-   wall" band right after the hero, distinct from every other section, with
-   the two sketches shown larger as the visual centrepiece. Text colours
-   need explicit overrides here since the global h1-h3/body rules assume a
-   light background. */
-
-.gallery-section { background: var(--navy); }
-.gallery-section h2 { color: var(--text-on-navy); }
-.gallery-section .section-intro { color: var(--text-on-navy-soft); max-width: 620px; margin: 0 auto 32px; text-align: center; }
-
-.gallery-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-@media (max-width: 640px) {
-  .gallery-preview { grid-template-columns: 1fr; gap: 16px; }
-}
 
 /* ---------- Artist directory cards ---------- */
 
@@ -388,8 +338,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .submit-btn {
-  background: var(--rust);
-  color: white;
+  background: var(--navy-soft);   /* white on pink fails contrast at 16px */
+  color: #fff;
   border: none;
   padding: 13px 28px;
   border-radius: 4px;
@@ -403,7 +353,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 #form-status { margin-top: 12px; font-weight: 600; min-height: 1.2em; }
 #form-status.success { color: #2a7a3d; }
-#form-status.error { color: #a8562e; }
+#form-status.error { color: #b3263f; }   /* was #a8562e (old rust) */
 
 /* ---------- Footer ---------- */
 
@@ -414,9 +364,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   color: var(--text-on-navy-soft);
   font-size: 0.85rem;
 }
+/* Narrow, centred text column so the copyright notice doesn't run in long lines */
+.site-footer p { max-width: 70ch; margin: 0 auto 10px; }
+.site-footer p:first-child { max-width: none; }   /* event line stays on one row */
+.site-footer p:last-child { margin-bottom: 0; }
 
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
   .visit-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ---------- Hero artwork (full-bleed; address overlays its white corner) ---------- */
+.hero-art { position: relative; margin: 0 -24px; }
+.hero-art img { display: block; width: 100%; height: auto; }
+.hero-where {
+  position: absolute;
+  left: max(24px, calc((100% - 1000px) / 2));
+  bottom: 4%;
+}
+.hero-where .hero-address,
+.hero-where .hero-handle { font-size: clamp(1.05rem, 2.4vw, 1.6rem); line-height: 1.3; }
+.hero-where .hero-address { margin: 0; }
+.hero-where .hero-handle  { margin: 6px 0 0; }
+/* Below ~1100px the white corner is too short for the address, so it flows under the artwork */
+@media (max-width: 1100px) {
+  .hero-where { position: static; padding: 4px max(24px, calc((100% - 1000px) / 2)) 32px; }
 }
