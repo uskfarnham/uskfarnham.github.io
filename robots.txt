@@ -52,7 +52,6 @@ Disallow: /
 
 # Generic Bulk Scrapers & Aggressive Harvesters
 User-agent: Amazonbot
-User-agent: Claude-User
 User-agent: ChatGPT-User
 User-agent: Perplexity-User
 User-agent: Diffbot
