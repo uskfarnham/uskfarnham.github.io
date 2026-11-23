@@ -122,18 +122,36 @@ const PORTAL_URL = 'https://script.google.com/macros/s/AKfycbyztaNJ308WkL6jSx8-s
 
     emptyNote.style.display = 'none';
     container.innerHTML = artists.map(renderArtistCard).join('');
+    setDirectoryHint();
   };
+
+  // Magnifier cue, same SVG as the Artist Info page's expand badge.
+  // Decorative only: the card is already a link named by the artist.
+  const CARD_BADGE_HTML = '<span class="artist-card-badge" aria-hidden="true">' +
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
+    '<circle cx="10" cy="10" r="6"></circle><line x1="15" y1="15" x2="21" y2="21"></line></svg></span>';
 
   function renderArtistCard(artist) {
     const href = PORTAL_URL + '?view=artistinfo&id=' + encodeURIComponent(artist.id);
-    const img = artist.imageUrl
-      ? `<img class="artist-card-photo" src="${sizedPortalImage(artist.imageUrl, 240)}" alt="" loading="lazy">`
-      : `<div class="artist-card-photo artist-card-photo-placeholder" aria-hidden="true"></div>`;
+    const photo = artist.imageUrl
+      ? `<img class="artist-card-photo" src="${sizedPortalImage(artist.imageUrl, 400)}" alt="" loading="lazy">`
+      : `<div class="artist-card-photo artist-card-photo-placeholder tint-${tintFor(artist.id)}" aria-hidden="true"><span>${escapeHtml(initialsFor(artist.displayName))}</span></div>`;
 
     return `<a class="artist-card" href="${href}" target="_blank" rel="noopener">
-      ${img}
+      <div class="artist-card-photo-wrap">${photo}${CARD_BADGE_HTML}</div>
       <span class="artist-card-name">${escapeHtml(artist.displayName)}</span>
     </a>`;
+  }
+
+  // Guidance line above the grid. Feature-detected (hover: none = touch-primary
+  // device), not UA-sniffed, matching the Artist Info page. Falls back to the
+  // desktop wording if matchMedia is unavailable.
+  function setDirectoryHint() {
+    const hint = document.getElementById('directoryHint');
+    if (!hint) return;
+    let isTouch = false;
+    try { isTouch = window.matchMedia('(hover: none)').matches; } catch (e) { /* desktop wording */ }
+    hint.textContent = (isTouch ? 'Tap' : 'Click') + ' an artist to see their work.';
   }
 
   // Portal images are served via the lh3 proxy (see _driveUrlToProxyUrl in
@@ -148,6 +166,20 @@ const PORTAL_URL = 'https://script.google.com/macros/s/AKfycbyztaNJ308WkL6jSx8-s
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // First letter of first and last word: "Jane Q. Smith" -> "JS"
+  function initialsFor(name) {
+    const words = (name || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return '';
+    return (words[0][0] + (words.length > 1 ? words[words.length - 1][0] : '')).toUpperCase();
+  }
+
+  // Stable 0-2 from the artist id, so an artist always gets the same colour
+  function tintFor(id) {
+    let h = 0;
+    for (const c of String(id)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    return h % 3;
   }
 
   const script = document.createElement('script');
