@@ -16,14 +16,15 @@
 :root {
   color-scheme: only light;   /* stop browsers force-darkening the white design */
     /* Colour — from the redesigned poster.
-     Names kept from the old palette; --rust is now the private-view pink. */
+     Names kept from the old palette; --rust is now the badge/accent pink. */
   --cream:        #ffffff;   /* page background (poster is white) */
   --cream-panel:  #ffffff;
   --navy:         #22265b;   /* poster Helvetica text */
   --navy-soft:    #283892;   /* poster title blue */
-  --rust:         #e05f76;   /* private-view pink: badge/accents only, not small text */
+  --rust:         #e05f76;   /* badge pink: badge/accents only, not small text */
   --rust-soft:    #e05f76;
   --ink:          #22265b;
+  --cr-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M43.79 0.24 C41.39 0.54 39.02 1.14 36.63 1.79 C34.25 2.45 31.86 3.29 29.47 4.18 C27.09 5.07 24.72 6.03 22.32 7.12 C19.91 8.21 17.33 9.20 15.06 10.74 C12.79 12.28 10.48 14.15 8.70 16.36 C6.93 18.57 5.65 21.42 4.42 24.00 C3.19 26.59 2.06 29.26 1.33 31.85 C0.60 34.45 0.27 37.01 0.05 39.59 C-0.17 42.17 0.01 44.73 0.00 47.33 C-0.01 49.92 -0.14 52.58 0.02 55.18 C0.17 57.77 0.29 60.33 0.92 62.91 C1.55 65.49 2.61 68.05 3.81 70.65 C5.01 73.25 6.44 75.91 8.13 78.50 C9.82 81.09 11.81 83.83 13.93 86.18 C16.05 88.53 18.48 90.96 20.84 92.61 C23.21 94.25 25.70 95.10 28.11 96.07 C30.51 97.04 32.88 97.81 35.26 98.44 C37.65 99.07 40.02 99.58 42.42 99.84 C44.82 100.10 47.28 99.97 49.68 100.00 C52.09 100.03 54.46 100.00 56.84 100.00 C59.23 100.00 61.61 100.12 64.00 99.99 C66.39 99.86 68.75 99.82 71.16 99.24 C73.56 98.65 76.02 97.67 78.42 96.48 C80.82 95.29 83.29 93.99 85.57 92.11 C87.85 90.23 90.32 87.66 92.11 85.20 C93.89 82.74 95.20 79.96 96.27 77.36 C97.33 74.76 97.92 72.20 98.48 69.62 C99.04 67.05 99.40 64.49 99.63 61.89 C99.86 59.29 99.88 56.64 99.87 54.04 C99.87 51.44 99.80 48.88 99.62 46.30 C99.44 43.72 99.15 41.16 98.80 38.57 C98.46 35.97 98.03 33.31 97.55 30.72 C97.06 28.12 96.61 25.56 95.89 22.98 C95.18 20.41 94.76 17.71 93.27 15.26 C91.77 12.82 89.19 10.26 86.94 8.33 C84.70 6.40 82.17 4.93 79.79 3.68 C77.40 2.43 75.04 1.44 72.63 0.83 C70.23 0.22 67.77 0.15 65.37 0.01 C62.96 -0.13 60.60 0.00 58.21 -0.00 C55.82 -0.00 53.46 -0.04 51.05 0.00 C48.65 0.04 46.19 -0.06 43.79 0.24Z'/%3E%3C/svg%3E");   /* Creative Response logo blob, traced */
 
   --tint-rust:    #fceef1;   /* very pale pink - About */
   --tint-navy:    #eef0f8;   /* very pale navy - Visit */
@@ -123,15 +124,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* For the real artwork: */
 .hero-title img { display: block; width: 100%; height: auto; }
 
-.private-view {
-  --pv: max(150px, calc(var(--title-fs) * 1.6));   /* badge diameter tracks the title size */
+/* Creative Response badge: shape traced from the Creative Response logo blob.
+   The pink fill is a masked ::before so the text above it is unaffected. */
+.cr-badge {
+  --pv: max(150px, calc(var(--title-fs) * 1.6));   /* badge height tracks the title size */
   position: absolute;
   top: calc(var(--title-fs) * 0.1);
   left: calc(var(--title-fs) * 2.95);             /* just right of the end of 'Farnham' / 'Urban' */
-  width: var(--pv);
+  width: calc(var(--pv) * 1.08);                  /* logo blob is ~1.08 x wider than tall */
   height: var(--pv);
-  border-radius: 50%;
-  background: var(--rust);
+  isolation: isolate;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -139,11 +141,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   justify-content: center;
   text-align: center;
   white-space: nowrap;
-  font-weight: 700;
-  font-size: calc(var(--pv) * 0.1);
-  line-height: 1.5;
+  font-size: calc(var(--pv) * 0.095);
+  line-height: 1.2;
 }
-.private-view strong { margin-bottom: 0.4em; }
+.cr-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--rust);
+  -webkit-mask: var(--cr-shape) center / 100% 100% no-repeat;
+          mask: var(--cr-shape) center / 100% 100% no-repeat;
+}
+.cr-badge-lead { font-weight: 400; margin-bottom: 0.3em; }
+.cr-badge strong { font-weight: 700; font-size: 1.55em; line-height: 1.1; }
 
 /* Wider screens: 'Urban Sketchers' shares a line (saves a line of height) and the
    badge moves to the right-hand edge of the column, level with 'Farnham'. */
@@ -154,7 +165,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .hero-title .l2 .w:first-child,
   .hero-title .l2 .w:last-child { padding-left: 0; }
   .hero-title .l3 { padding-left: 14%; }
-  .private-view {
+  .cr-badge {
     --pv: max(150px, calc(var(--title-fs) * 1.55));
     left: auto;
     right: 0;
